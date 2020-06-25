@@ -55,11 +55,30 @@ function togglePlayer(){
 }
 
 function checkGameOver(){
+    winner = checkWinner();
 
+    if(winner){
+        showGameOverDialog(`Vitória do ${winner}`);
+    }else if(turn > 8){
+        showGameOverDialog(`Deu Velha!`);
+    }
 }
 
 function checkWinner(){
+    let cells = boardTable.querySelectorAll('.cell');
+    cells = Array.from(cells).map(element => element.innerText);
+    const values = winningConditions.map(condition => condition.map(position => cells[position]).join(''));
+    const isOWinner = values.includes('OOO');
+    const isXWinner = values.includes('XXX');
 
+    if(isOWinner || isXWinner){
+        isGameOver = true;
+        if(isOWinner){
+            return 'O';
+        }
+        return 'X';
+    }
+    return null;
 }
 
 function showGameOverDialog(message){
